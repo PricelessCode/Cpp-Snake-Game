@@ -1,38 +1,62 @@
-#include <ncurses.h>
-#include <iostream>
+/*
+This is the console executable, that makes use of the fSnakeGame class.
+This is handling all user interaction. For game logic, please see fSnakeGame.h.
+*/
 
+#include "fSnakeGame.h"
 
-#define WHITE 1
-#define BLACK 2
-#define BLUE 3
+int maxheight, maxwidth;
+void PlayGame();
+int IsUserReady();
+int AskUserToPlayAgain();
+void ClearCentre();
+int UserInput();
 
-int main() {
-    initscr();
-    resize_term(50,100);
-    start_color();
-    init_pair(WHITE, COLOR_WHITE, COLOR_WHITE);
-    init_pair(BLACK, COLOR_BLACK, COLOR_BLACK);
-    init_pair(BLUE, COLOR_BLUE, COLOR_BLUE);
-    
-    // Background color for the mother window
-    bkgd(COLOR_PAIR(WHITE));
+int main () {	
+	if (IsUserReady() == 'y') // wait for confirmation of the user
+	do {
+		{
+			fSnakeGame NewSnake;
+			NewSnake.PlayGame();
+		}
+	}
+	while (AskUserToPlayAgain() == 'y');
+	return 0;
+}
 
-    // Remove the cursor
-    curs_set(0);
-    
-    refresh();
+// clear the screen and centre the cursor
+void ClearCentre(float x, float y)
+{
+	clear(); // clear the screen if the game is played for the 2nd time	
+	initscr(); 
+	noecho();
+	getmaxyx(stdscr, maxheight, maxwidth);
+	move((maxheight/y), (maxwidth/x));
+}
 
-    // Game Window
-    WINDOW * gameWindow = newwin(25, 50, 1, 1);
-    wbkgd(gameWindow, COLOR_PAIR(BLUE));
-    wattron(gameWindow, COLOR_PAIR(BLACK));
-    wborder(gameWindow, '#', '#', '#', '#', '#', '#', '#', '#');
-    wrefresh(gameWindow);
+// receive user confirmation
+int UserInput()
+{
+	int UserInput = getch();
+	refresh();
+	endwin();
+	clear();
 
+	return UserInput;	
+}
 
-    getch();
-    delwin(gameWindow);
-    endwin();
+// print start menu
+int IsUserReady() 
+{
+	ClearCentre(3, 2.5);
+	printw("Welcome to the Snake Game. Are you ready? (y/n)");
+	return UserInput();
+}
 
-    return 0;
+// print end of the game menu and ask user to play again
+int AskUserToPlayAgain()
+{
+	ClearCentre(2.5, 2.5);
+	printw("Do you want to play again? (y/n)");
+	return UserInput();
 }
