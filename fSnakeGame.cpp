@@ -81,7 +81,7 @@ fSnakeGame::~fSnakeGame()
 // initialise the game window
 void fSnakeGame::InitGameWindow() { 
 	initscr(); // initialise the screen
-	nodelay(stdscr,TRUE);
+	nodelay(stdscr,1);
 	keypad(stdscr, true); // initialise the keyboard: we can use arrows for directions
 	noecho(); // user input is not displayed on the screen
 	curs_set(0); // cursor symbol is not not displayed on the screen (Linux)
@@ -129,7 +129,7 @@ void fSnakeGame::DrawWindow()
 // draw snake's body
 void fSnakeGame::DrawSnake() {
 	for (int i = 0; i < 5; i++) {
-		snake.push_back(CharPosition(30 + i, 10));
+		snake.push_back(CharPosition(30 + i, 30));
 	}
 
 	for (int i = 0; i < snake.size(); i++) {
@@ -172,6 +172,13 @@ void fSnakeGame::PositionFruit() {
 			continue; // if true, ignore the following and go back to the beginning of function
 		}
 
+		// check with other items
+		for (int i = 0; i < 3; i++) {
+			if (items[i].pos.x == tmpx && items[i].pos.y == tmpy) {
+				continue;
+			}
+		}
+
 		// if the coordinates are valid, add fruit in the window
 		fruit.x = tmpx;
 		fruit.y = tmpy;
@@ -206,15 +213,19 @@ void fSnakeGame::PositionPoison() {
 			}
 		}
 
-		// Check that the poison is not positioned on the fruit
-		if (fruit.x == tmpx && fruit.y == tmpy) {
-			continue;
+		// check with other items
+		for (int i = 0; i < 3; i++) {
+			if (items[i].pos.x == tmpx && items[i].pos.y == tmpy) {
+				continue;
+			}
 		}
 
 		// check that the poison is positioned within the game window
-		if (tmpx >= maxwidth - 2 || tmpy >= maxheight - 3) {
+		if (tmpx >= maxwidth - 2 || tmpy >= maxheight - 4) {
 			continue; // if true, ignore the following and go back to the beginning of function
 		}
+
+
 
 		// if the coordinates are valid, add fruit in the window
 		poison.x = tmpx;
@@ -358,17 +369,18 @@ void fSnakeGame::MoveSnake() {
 // Add items every 3 seconds
 void fSnakeGame::createItems() {
 	while(1) {
+		this_thread::sleep_for(milliseconds(3000));
 		rand() % 10 > 4 ? PositionFruit() : PositionPoison();
-		this_thread::sleep_for(milliseconds(2000));
 	}
 }
 
 void fSnakeGame::PlayGame() {
 	thread t(&fSnakeGame::createItems, this);
+	
     while(1) {
         if (FatalCollision()) {
-            move((maxheight - 2) / 2,(maxwidth - 5) / 2);
-            printw("GAME OVER");
+            // move((maxheight - 2) / 2,(maxwidth - 5) / 2);
+            // printw("GAME OVER");
 			t.detach();
             break;
         }
