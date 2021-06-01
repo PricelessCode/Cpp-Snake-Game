@@ -20,7 +20,7 @@ struct CharPosition {
 class fSnakeGame {
 private:
 	int score, del, maxwidth, maxheight;
-	char direction, headChar, partchar, edgechar, fruitchar, poisonChar;
+	char direction, headChar, partchar, edgechar, imChar, fruitchar, poisonChar;
 	// partchar is the character representing the snake's body
 	// edgechar is the character representing the edge of the game window
 	// fruitchar is the character representing the fruit

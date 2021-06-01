@@ -18,6 +18,7 @@ fSnakeGame::fSnakeGame() {
 	headChar = 'O';
 	partchar = '@'; // character to represent the snake
 	edgechar = (char)219; // full rectangle on the key table
+	imChar = (char)43;
 	fruitchar = '*'; 
 	poisonChar = 'X';
 	fruit.x = 0;
@@ -77,13 +78,21 @@ void fSnakeGame::DrawWindow()
 	for (int i = 0; i < maxheight-1; i++) // draws left side
 	{
 		move(i, 0);
-		addch(edgechar);
+		if (i == 0 || i == maxheight - 2) {
+			addch(imChar);
+		} else {
+			addch(edgechar);	
+		}
 	}
 
 	for (int i = 0; i < maxheight-1; i++) // draws right side
 	{
 		move(i, maxwidth-1);
-		addch(edgechar);
+		if (i == 0 || i == maxheight - 2) {
+			addch(imChar);
+		} else {
+			addch(edgechar);	
+		}
 	}
 	return;
 }
@@ -190,6 +199,8 @@ bool fSnakeGame::FatalCollision() {
 			return true;
 		}
 	}
+
+	// if (snake.size() < )
 
 	return false;
 }
