@@ -326,7 +326,7 @@ void fSnakeGame::PlayGame() {
         if (FatalCollision()) {
             move((maxheight - 2) / 2,(maxwidth - 5) / 2);
             printw("GAME OVER");
-			t.join();
+			t.detach();
             break;
         }
 
@@ -343,5 +343,5 @@ void fSnakeGame::PlayGame() {
         usleep(del); // delay
 	
     }
-	t.join();
+	
 }
