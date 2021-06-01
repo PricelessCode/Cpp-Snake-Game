@@ -18,9 +18,15 @@ struct CharPosition {
 	CharPosition();
 };
 
+struct Item {
+	CharPosition pos;
+	bool isFruit;
+	Item(int col, int row, bool isFruit);
+};
+
 class fSnakeGame {
 private:
-	int score, del, maxwidth, maxheight, itemCount;
+	int score, del, maxwidth, maxheight, itemIndex;
 	char direction, headChar, partchar, edgechar, imChar, fruitchar, poisonChar;
 	// partchar is the character representing the snake's body
 	// edgechar is the character representing the edge of the game window
@@ -31,11 +37,12 @@ private:
 	CharPosition fruit; // need to clarify this combination
 	CharPosition poison;
 	std::vector<CharPosition> snake; // represent the snake's body
-	std::vector<CharPosition> items; // Keeping track of 3 items
+	std::vector<Item> items; // Keeping track of 3 items
 
 	void InitGameWindow();
 	void DrawWindow();  
 	void DrawSnake();
+	void drawItems();
 	void PrintScore();
 	void PositionFruit();
 	void PositionPoison();

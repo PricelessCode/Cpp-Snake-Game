@@ -15,6 +15,12 @@ CharPosition::CharPosition() {
 	y = 0;
 }
 
+Item::Item(int col, int row, bool fruit) {
+	pos.x = col;
+	pos.y = row;
+	isFruit = fruit;
+}
+
 fSnakeGame::fSnakeGame() {
 	// variables initialisation:
 	headChar = 'O';
@@ -28,7 +34,6 @@ fSnakeGame::fSnakeGame() {
 	poison.x = 0;
 	poison.y = 0;
 	score = 0;
-	itemCount = 0;
 	del = 110000;
 	bool bEatsFruit = false;
 	bool bEatsPoison = false;
@@ -36,7 +41,7 @@ fSnakeGame::fSnakeGame() {
 	srand(time(NULL));
 	
 	InitGameWindow();
-	PositionFruit();
+	// PositionFruit();
 	PositionPoison();
 	DrawWindow();
 	DrawSnake();
@@ -126,6 +131,9 @@ void fSnakeGame::PrintScore() {
 
 // position a new fruit in the game window
 void fSnakeGame::PositionFruit() {
+	int x = 0;
+	int y = 0;
+
 	while(1) {
 		int tmpx = rand() % maxwidth + 1; // +1 to avoid the 0
 		int tmpy = rand() % maxheight + 1;
@@ -141,13 +149,20 @@ void fSnakeGame::PositionFruit() {
 		if (tmpx >= maxwidth-2 || tmpy >= maxheight-3) {
 			continue; // if true, ignore the following and go back to the beginning of function
 		}
+		
+		x = fruit.x;
+		y = fruit.y;
 
 		// if the coordinates are valid, add fruit in the window
 		fruit.x = tmpx;
 		fruit.y = tmpy;
+
+		
 		break;
 	}
 
+	move(y, x);
+	addch(' ');
 	move(fruit.y, fruit.x); 
 	addch(fruitchar);
 	refresh();
@@ -214,7 +229,7 @@ bool fSnakeGame::FatalCollision() {
 // define behaviour when snake eats the fruit
 bool fSnakeGame::GetsFruit() {
 	if (snake[0].x == fruit.x && snake[0].y == fruit.y) {
-		PositionFruit(); 
+		// PositionFruit(); 
 		score +=10; 
 		PrintScore();
 
@@ -275,7 +290,7 @@ void fSnakeGame::MoveSnake() {
 	if (!bEatsFruit) {
 		// if fruit was not eaten remove the tail
 		move(snake[snake.size()-1].y, snake[snake.size()-1].x); // moves at the end of the tail
-		printw(" "); // add empty ch to remove last character
+		addch(' '); // add empty ch to remove last character
 		refresh();
 		snake.pop_back(); // removes the last element in the vector, reducing the container size by one
 	}
@@ -283,7 +298,7 @@ void fSnakeGame::MoveSnake() {
 	
 	if (bEatsPoison) {
 		move(snake[snake.size()-1].y, snake[snake.size()-1].x); // moves at the end of the tail
-		printw(" "); // add empty ch to remove last character
+		addch(' '); // add empty ch to remove last character
 		refresh();
 		snake.pop_back(); // removes the last element in the vector, reducing the container size by one
 	}
@@ -314,9 +329,8 @@ void fSnakeGame::MoveSnake() {
 // Add items every 3 seconds
 void fSnakeGame::createItems() {
 	while(1) {
-		move(4, 4);
-		addch('T');
-		this_thread::sleep_for(milliseconds(5000));
+		PositionFruit();
+		this_thread::sleep_for(milliseconds(2000));
 	}
 }
 
