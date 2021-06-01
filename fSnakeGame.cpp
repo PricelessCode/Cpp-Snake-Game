@@ -38,11 +38,32 @@ fSnakeGame::fSnakeGame() {
 	bool bEatsFruit = false;
 	bool bEatsPoison = false;
 	direction = 'l';
+
 	srand(time(NULL));
 	
 	InitGameWindow();
+
+	// Init 3 items on the screen
+	for (int i = 0; i < 3; i++) {
+		int tmpX = rand() % maxwidth + 1;
+		int tmpY = rand() % maxheight + 1;
+		if (i == 2) {
+			// Add 1 Poison
+			items.push_back(Item(tmpX, tmpY, false));
+			move(tmpY, tmpX);
+			addch(poisonChar);
+		} else {
+			// Add 2 Fruits
+			items.push_back(Item(tmpX, tmpY, true));	
+			move(tmpY, tmpX);
+			addch(fruitchar);
+		}
+		
+		refresh();
+	}
+
 	// PositionFruit();
-	PositionPoison();
+	// PositionPoison();
 	DrawWindow();
 	DrawSnake();
 	PrintScore();
@@ -128,11 +149,12 @@ void fSnakeGame::PrintScore() {
 	printw("Score: %d", score);
 	return;
 }
+void fSnakeGame::drawItems() {
+
+}
 
 // position a new fruit in the game window
 void fSnakeGame::PositionFruit() {
-	int x = 0;
-	int y = 0;
 
 	while(1) {
 		int tmpx = rand() % maxwidth + 1; // +1 to avoid the 0
@@ -146,12 +168,9 @@ void fSnakeGame::PositionFruit() {
 		}
 
 		// check that the fruit is positioned within the game window
-		if (tmpx >= maxwidth-2 || tmpy >= maxheight-3) {
+		if (tmpx >= maxwidth - 2 || tmpy >= maxheight - 3) {
 			continue; // if true, ignore the following and go back to the beginning of function
 		}
-		
-		x = fruit.x;
-		y = fruit.y;
 
 		// if the coordinates are valid, add fruit in the window
 		fruit.x = tmpx;
@@ -161,9 +180,16 @@ void fSnakeGame::PositionFruit() {
 		break;
 	}
 
-	move(y, x);
+	// Erase the previous position
+	Item item = items.front();
+	items.pop_front();
+	move(item.pos.y, item.pos.x);
 	addch(' ');
-	move(fruit.y, fruit.x); 
+	refresh();
+
+	// Draw New position
+	items.push_back(Item(fruit.x, fruit.y, true));
+	move(fruit.y, fruit.x);
 	addch(fruitchar);
 	refresh();
 }
@@ -228,35 +254,30 @@ bool fSnakeGame::FatalCollision() {
 
 // define behaviour when snake eats the fruit
 bool fSnakeGame::GetsFruit() {
-	if (snake[0].x == fruit.x && snake[0].y == fruit.y) {
-		// PositionFruit(); 
-		score +=10; 
-		PrintScore();
 
-		// if score is a multiple of 100, increase snake speed
-		if ((score % 100) == 0) {
-			del -= 1000;
+	for (int i = 0; i < 3; i++) {
+		Item item = items[i];
+		if (snake[0].x == item.pos.x && snake[0].y == item.pos.y && item.isFruit) {
+			score +=10; 
+			PrintScore();
+
+			return bEatsFruit = true;
 		}
-		return bEatsFruit = true;
 	}
-	else 
-	{
-		return bEatsFruit = false;
-	}
-	return bEatsFruit;
+	return bEatsFruit = false;
 }
 
 bool fSnakeGame::GetsPoison() {
-	if (snake[0].x == poison.x && snake[0].y == poison.y) {
-		PositionPoison(); 
-		score -= 10;
-		PrintScore();
+	for (int i = 0; i < 3; i++) {
+		Item item = items[i];
+		if (snake[0].x == item.pos.x && snake[0].y == item.pos.y && !item.isFruit) {
+			score -= 10; 
+			PrintScore();
 
-		return bEatsPoison = true;
-	} else {
-		return bEatsPoison = false;
+			return bEatsPoison = true;
+		}
 	}
-	return bEatsPoison;
+	return bEatsPoison = false;
 }
 
 

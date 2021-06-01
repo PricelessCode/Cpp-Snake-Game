@@ -5,6 +5,7 @@ The game is a very simple version of the classic snake game.
 
 #include <iostream>
 #include <vector>
+#include <deque>
 #include <ncurses.h>
 #include <cstdlib>
 #include <ctime>
@@ -37,7 +38,7 @@ private:
 	CharPosition fruit; // need to clarify this combination
 	CharPosition poison;
 	std::vector<CharPosition> snake; // represent the snake's body
-	std::vector<Item> items; // Keeping track of 3 items
+	std::deque<Item> items; // Keeping track of 3 items
 
 	void InitGameWindow();
 	void DrawWindow();  

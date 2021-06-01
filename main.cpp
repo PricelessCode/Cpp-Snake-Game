@@ -14,14 +14,14 @@ int UserInput();
 
 
 int main () {	
-	if (IsUserReady() == 'y') // wait for confirmation of the user
-	do {
-		{
+	// if (IsUserReady() == 'y') // wait for confirmation of the user
+	// do {
+	// 	{
 			fSnakeGame NewSnake;
 			NewSnake.PlayGame();
-		}
-	}
-	while (AskUserToPlayAgain() == 'y');
+	// 	}
+	// }
+	// while (AskUserToPlayAgain() == 'y');
 	return 0;
 }
 
