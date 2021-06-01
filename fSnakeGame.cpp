@@ -1,7 +1,9 @@
 #include "fSnakeGame.h"
 #include <unistd.h>
+#include <thread>
 
 using namespace std;
+using namespace std::chrono;
 
 CharPosition::CharPosition(int col, int row) {
 	x = col;
@@ -26,6 +28,7 @@ fSnakeGame::fSnakeGame() {
 	poison.x = 0;
 	poison.y = 0;
 	score = 0;
+	itemCount = 0;
 	del = 110000;
 	bool bEatsFruit = false;
 	bool bEatsPoison = false;
@@ -241,6 +244,7 @@ bool fSnakeGame::GetsPoison() {
 	return bEatsPoison;
 }
 
+
 // define snake's movements
 void fSnakeGame::MoveSnake() {
 	int KeyPressed = getch();
@@ -307,23 +311,37 @@ void fSnakeGame::MoveSnake() {
 	return;
 }
 
+// Add items every 3 seconds
+void fSnakeGame::createItems() {
+	while(1) {
+		move(4, 4);
+		addch('T');
+		this_thread::sleep_for(milliseconds(5000));
+	}
+}
+
 void fSnakeGame::PlayGame() {
+	thread t(&fSnakeGame::createItems, this);
     while(1) {
         if (FatalCollision()) {
             move((maxheight - 2) / 2,(maxwidth - 5) / 2);
             printw("GAME OVER");
+			t.join();
             break;
         }
 
+		
         GetsFruit();
 		GetsPoison();
         MoveSnake();
 
-        if (direction=='q') //exit
-        {
+		// exit
+        if (direction=='q') {
         	break;
         }
 
         usleep(del); // delay
+	
     }
+	t.join();
 }

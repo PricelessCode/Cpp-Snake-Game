@@ -12,6 +12,7 @@ int AskUserToPlayAgain();
 void ClearCentre();
 int UserInput();
 
+
 int main () {	
 	if (IsUserReady() == 'y') // wait for confirmation of the user
 	do {
