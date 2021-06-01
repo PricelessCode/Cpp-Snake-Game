@@ -200,7 +200,10 @@ bool fSnakeGame::FatalCollision() {
 		}
 	}
 
-	// if (snake.size() < )
+	// if size of the snake is smaller than 3
+	if (snake.size() < 3) {
+		return true;
+	}
 
 	return false;
 }
