@@ -255,6 +255,15 @@ void fSnakeGame::MoveSnake() {
 
 	// the snake doesn't eat fruit, remains same size
 	if (!bEatsFruit) {
+		// if fruit was not eaten remove the tail
+		move(snake[snake.size()-1].y, snake[snake.size()-1].x); // moves at the end of the tail
+		printw(" "); // add empty ch to remove last character
+		refresh();
+		snake.pop_back(); // removes the last element in the vector, reducing the container size by one
+	}
+
+	
+	if (bEatsPoison) {
 		move(snake[snake.size()-1].y, snake[snake.size()-1].x); // moves at the end of the tail
 		printw(" "); // add empty ch to remove last character
 		refresh();
@@ -273,9 +282,11 @@ void fSnakeGame::MoveSnake() {
 		snake.insert(snake.begin(), CharPosition(snake[0].x, snake[0].y+1)); 
 	}
 
-	// move to the new CharPosition coordinates
+	// Move to the new CharPosition coordinates
 	move(snake[0].y, snake[0].x);
 	addch(headChar); // add a new head
+
+	// Change previous head to body char
 	move(snake[1].y, snake[1].x);
 	addch(partchar);
 	refresh();
