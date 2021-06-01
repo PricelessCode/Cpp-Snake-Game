@@ -222,7 +222,16 @@ void fSnakeGame::PositionPoison() {
 		break;
 	}
 
-	move(poison.y, poison.x); 
+	// Erase the previous position
+	Item item = items.front();
+	items.pop_front();
+	move(item.pos.y, item.pos.x);
+	addch(' ');
+	refresh();
+
+	// Draw New position
+	items.push_back(Item(poison.x, poison.y, false));
+	move(poison.y, poison.x);
 	addch(poisonChar);
 	refresh();
 }
@@ -254,7 +263,6 @@ bool fSnakeGame::FatalCollision() {
 
 // define behaviour when snake eats the fruit
 bool fSnakeGame::GetsFruit() {
-
 	for (int i = 0; i < 3; i++) {
 		Item item = items[i];
 		if (snake[0].x == item.pos.x && snake[0].y == item.pos.y && item.isFruit) {
@@ -350,7 +358,7 @@ void fSnakeGame::MoveSnake() {
 // Add items every 3 seconds
 void fSnakeGame::createItems() {
 	while(1) {
-		PositionFruit();
+		rand() % 10 > 4 ? PositionFruit() : PositionPoison();
 		this_thread::sleep_for(milliseconds(2000));
 	}
 }
