@@ -26,6 +26,7 @@ fSnakeGame::fSnakeGame() {
 	headChar = 'O';
 	partchar = '@'; // character to represent the snake
 	edgechar = (char)219; // full rectangle on the key table
+	gateChar = '#';
 	imChar = (char)43;
 	fruitchar = '*'; 
 	poisonChar = 'X';
@@ -45,7 +46,7 @@ fSnakeGame::fSnakeGame() {
 
 	// Init 3 items on the screen
 	for (int i = 0; i < 3; i++) {
-		int tmpX = rand() % maxwidth + 1;
+		int tmpX = rand() % gameScreenWidth + 1;
 		int tmpY = rand() % maxheight + 1;
 		if (i == 2) {
 			// Add 1 Poison
@@ -86,19 +87,20 @@ void fSnakeGame::InitGameWindow() {
 	noecho(); // user input is not displayed on the screen
 	curs_set(0); // cursor symbol is not not displayed on the screen (Linux)
 	getmaxyx(stdscr, maxheight, maxwidth); // define dimensions of game window
+	gameScreenWidth = maxwidth - 30;
+	gameScreenHeight = maxheight;
 	return; 
 }
 
 // draw the game window
-void fSnakeGame::DrawWindow()
-{
-	for (int i = 0; i < maxwidth; i++) // draws top
+void fSnakeGame::DrawWindow() {
+	for (int i = 0; i < gameScreenWidth; i++) // draws top
 	{
 		move(0, i);
 		addch(edgechar);
 	}
 
-	for (int i = 0; i < maxwidth; i++) // draws bottom
+	for (int i = 0; i < gameScreenWidth; i++) // draws bottom
 	{
 		move(maxheight-2, i);
 		addch(edgechar);
@@ -116,12 +118,77 @@ void fSnakeGame::DrawWindow()
 
 	for (int i = 0; i < maxheight-1; i++) // draws right side
 	{
-		move(i, maxwidth-1);
+		move(i, gameScreenWidth - 1);
 		if (i == 0 || i == maxheight - 2) {
 			addch(imChar);
 		} else {
 			addch(edgechar);	
 		}
+	}
+
+
+	// Draw Score Board
+	int offSetX = 5;
+	int offSetY = 0;
+	int screenStartX = gameScreenWidth + offSetX;
+	int screenStartY = 0 + offSetY;
+	const int XSCREENSIZE = 18;
+	const int YSCREENSIZE = 10;
+	
+
+	// Top
+	for (int i = 0; i < XSCREENSIZE; i++) {
+		move(screenStartY, screenStartX + i);
+		addch('^');
+	}
+
+	// Bottom
+	for (int i = 0; i < XSCREENSIZE; i++) {
+		move(screenStartY + YSCREENSIZE, screenStartX + i);
+		addch('^');
+	}
+
+	// Left
+	for (int i = 0; i < YSCREENSIZE; i++) {
+		move(screenStartY + i, screenStartX);
+		addch('^');
+	}
+
+	// Right
+	for (int i = 0; i < YSCREENSIZE; i++) {
+		move(screenStartY + i, screenStartX + XSCREENSIZE - 1);
+		addch('^');
+	} 
+
+	// Draw Misison Board
+	// Draw Score Board
+	offSetX = 5;
+	offSetY = 18;
+	screenStartX = gameScreenWidth + offSetX;
+	screenStartY = 0 + offSetY;
+
+	// Top
+	for (int i = 0; i < XSCREENSIZE; i++) {
+		move(screenStartY, screenStartX + i);
+		addch('^');
+	}
+
+	// Bottom
+	for (int i = 0; i < XSCREENSIZE; i++) {
+		move(screenStartY + YSCREENSIZE, screenStartX + i);
+		addch('^');
+	}
+
+	// Left
+	for (int i = 0; i < YSCREENSIZE; i++) {
+		move(screenStartY + i, screenStartX);
+		addch('^');
+	}
+
+	// Right
+	for (int i = 0; i < YSCREENSIZE; i++) {
+		move(screenStartY + i, screenStartX + XSCREENSIZE - 1);
+		addch('^');
 	}
 	return;
 }
@@ -157,7 +224,7 @@ void fSnakeGame::drawItems() {
 void fSnakeGame::PositionFruit() {
 
 	while(1) {
-		int tmpx = rand() % maxwidth + 1; // +1 to avoid the 0
+		int tmpx = rand() % gameScreenWidth + 1; // +1 to avoid the 0
 		int tmpy = rand() % maxheight + 1;
 
 		// check that the fruit is not positioned on the snake
@@ -168,7 +235,7 @@ void fSnakeGame::PositionFruit() {
 		}
 
 		// check that the fruit is positioned within the game window
-		if (tmpx >= maxwidth - 2 || tmpy >= maxheight - 3) {
+		if (tmpx >= gameScreenWidth - 2 || tmpy >= maxheight - 3) {
 			continue; // if true, ignore the following and go back to the beginning of function
 		}
 
@@ -203,7 +270,7 @@ void fSnakeGame::PositionFruit() {
 
 void fSnakeGame::PositionPoison() {
 	while(true) {
-		int tmpx = rand() % maxwidth + 1; // +1 to avoid the 0
+		int tmpx = rand() % gameScreenWidth + 1; // +1 to avoid the 0
 		int tmpy = rand() % maxheight + 1;
 
 		// check that the poison is not positioned on the snake
@@ -221,7 +288,7 @@ void fSnakeGame::PositionPoison() {
 		}
 
 		// check that the poison is positioned within the game window
-		if (tmpx >= maxwidth - 2 || tmpy >= maxheight - 4) {
+		if (tmpx >= gameScreenWidth - 2 || tmpy >= maxheight - 4) {
 			continue; // if true, ignore the following and go back to the beginning of function
 		}
 
@@ -250,7 +317,7 @@ void fSnakeGame::PositionPoison() {
 // set game over situations
 bool fSnakeGame::FatalCollision() {
 	// if the snake hits the edge of the window
-	if (snake[0].x == 0 || snake[0].x == maxwidth-1 || snake[0].y == 0 || snake[0].y == maxheight-2)
+	if (snake[0].x == 0 || snake[0].x == gameScreenWidth-1 || snake[0].y == 0 || snake[0].y == maxheight-2)
 	{
 		return true;
 	}

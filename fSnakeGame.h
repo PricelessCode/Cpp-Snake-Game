@@ -27,8 +27,9 @@ struct Item {
 
 class fSnakeGame {
 private:
-	int score, del, maxwidth, maxheight, itemIndex;
+	int score, del, gameScreenWidth, gameScreenHeight, maxwidth, maxheight, itemIndex;
 	char direction, headChar, partchar, edgechar, imChar, fruitchar, poisonChar;
+	char gateChar;
 	// partchar is the character representing the snake's body
 	// edgechar is the character representing the edge of the game window
 	// fruitchar is the character representing the fruit
@@ -41,7 +42,7 @@ private:
 	std::deque<Item> items; // Keeping track of 3 items
 
 	void InitGameWindow();
-	void DrawWindow();  
+	void DrawWindow();
 	void DrawSnake();
 	void drawItems();
 	void PrintScore();
@@ -52,6 +53,7 @@ private:
 	bool GetsFruit();
 	bool GetsPoison();
 	void createItems();
+	void updateBoard();
 
 public:
 	fSnakeGame();
