@@ -39,9 +39,13 @@ private:
 	CharPosition poison;
 	std::vector<CharPosition> snake; // represent the snake's body
 	std::deque<Item> items; // Keeping track of 3 items
+	//Edited By Bear
+	int gateX;
+	int gateY;
+	char gateChar;
 
 	void InitGameWindow();
-	void DrawWindow();  
+	void DrawWindow();
 	void DrawSnake();
 	void drawItems();
 	void PrintScore();
@@ -52,6 +56,10 @@ private:
 	bool GetsFruit();
 	bool GetsPoison();
 	void createItems();
+
+	//Edited By Bear
+	void CreateGate();
+	bool isGate(int x, int y);
 
 public:
 	fSnakeGame();
