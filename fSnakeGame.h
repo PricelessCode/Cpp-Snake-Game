@@ -73,12 +73,12 @@ private:
 	CharPosition missionScreen;
 	void createStages();
 	void DrawWindow();
-	bool checkCompleted();
 	void updateBoard();
 
 public:
-	fSnakeGame();
+	fSnakeGame(int);
 	~fSnakeGame(); // destructor for cleanup and memory deallocation
+	bool checkCompleted();
 	void PlayGame();
 };
 

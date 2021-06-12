@@ -21,7 +21,7 @@ Item::Item(int col, int row, bool fruit) {
 	isFruit = fruit;
 }
 
-fSnakeGame::fSnakeGame() {
+fSnakeGame::fSnakeGame(int s) {
 	// variables initialisation:
 	headChar = 'O';
 	partchar = '@'; // character to represent the snake
@@ -40,7 +40,7 @@ fSnakeGame::fSnakeGame() {
 	bEatsFruit = false;
 	bEatsPoison = false;
 	direction = 'l';
-	stage = 0;
+	stage = s;
 	cntFruit = 0;
 	cntPoison = 0;
 	cntGate = 0;
@@ -90,7 +90,7 @@ fSnakeGame::~fSnakeGame() {
 // initialise the game window
 void fSnakeGame::InitGameWindow() { 
 	initscr(); // initialise the screen
-	nodelay(stdscr,1);
+	nodelay(stdscr, 1);
 	keypad(stdscr, true); // initialise the keyboard: we can use arrows for directions
 	noecho(); // user input is not displayed on the screen
 	curs_set(0); // cursor symbol is not not displayed on the screen (Linux)
@@ -110,16 +110,16 @@ void fSnakeGame::createStages() {
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -166,59 +166,28 @@ void fSnakeGame::updateBoard() {
 
 bool fSnakeGame::checkCompleted() {
 	// If completed
-	if (snake.size() >= stages[stage].length
-		&& cntFruit >= stages[stage].nFruit
-		&& cntPoison >= stages[stage].nPoison
-		&& cntGate >= stages[stage].nGate) {
-		cntFruit = 0;
-		cntPoison = 0;
-		cntGate = 0;
+	// if (snake.size() >= stages[stage].length
+	// 	&& cntFruit >= stages[stage].nFruit
+	// 	&& cntPoison >= stages[stage].nPoison
+	// 	&& cntGate >= stages[stage].nGate) {
+	// 	cntFruit = 0;
+	// 	cntPoison = 0;
+	// 	cntGate = 0;
 		
-		// TODO: Remove the previous barriers?
+	// 	// TODO: Remove the previous barriers?
 
-		// If it's not on the first stage
-		if (stage != 0) {
-			stage += 1;
-			initSnakeSize = snake.size();
-		}
+	// 	// If it's not on the first stage
+	// 	if (stage != 0) {
+	// 		stage += 1;
+	// 		initSnakeSize = snake.size();
+	// 	}
 		return true;
-	}
-	return false;
+	// }
+	// return false;
 }
 
 // draw the game window
 void fSnakeGame::DrawWindow() {
-	// for (int i = 0; i < gameScreenWidth; i++) // draws top
-	// {
-	// 	move(0, i);
-	// 	addch(edgechar);
-	// }
-
-	// for (int i = 0; i < gameScreenWidth; i++) // draws bottom
-	// {
-	// 	move(maxheight - 2, i);
-	// 	addch(edgechar);
-	// }
-
-	// for (int i = 0; i < maxheight-1; i++) // draws left side
-	// {
-	// 	move(i, 0);
-	// 	if (i == 0 || i == maxheight - 2) {
-	// 		addch(imChar);
-	// 	} else {
-	// 		addch(edgechar);	
-	// 	}
-	// }
-
-	// for (int i = 0; i < maxheight-1; i++) // draws right side
-	// {
-	// 	move(i, gameScreenWidth - 1);
-	// 	if (i == 0 || i == maxheight - 2) {
-	// 		addch(imChar);
-	// 	} else {
-	// 		addch(edgechar);	
-	// 	}
-	// }
 
 	// Draw Walls
 	for (int i = 0; i < stages[stage].walls.size(); i++) { // v
@@ -571,37 +540,34 @@ void fSnakeGame::createItems() {
 	while(1) {
 		this_thread::sleep_for(milliseconds(3000));
 		rand() % 10 > 4 ? PositionFruit() : PositionPoison();
+		// break;
 	}
 }
 
 void fSnakeGame::PlayGame() {
 	thread t(&fSnakeGame::createItems, this);
-	
+	t.detach();
+
     while(1) {
         if (FatalCollision()) {
             // move((maxheight - 2) / 2,(maxwidth - 5) / 2);
             // printw("GAME OVER");
-			t.detach();
+			
             break;
         }
 
-		
         GetsFruit();
 		GetsPoison();
         MoveSnake();
 		updateBoard();
 
 		//Check - If the user has completed the level
-		// if (checkCompleted) {
-			
-		// }
-		// exit
-        if (direction=='q') {
-        	break;
-        }
+		if (cntFruit == 1) {
+			// t.join();
+			break;
+		}
 
         usleep(del); // delay
 	
     }
-	
 }
