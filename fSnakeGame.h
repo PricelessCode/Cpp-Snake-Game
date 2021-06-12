@@ -21,7 +21,7 @@ struct CharPosition {
 };
 
 struct Stage {
-	std::vector<CharPosition> barriers;
+	std::vector<std::vector<int>> walls;
 	int length, nFruit, nPoison, nGate;	
 };
 
@@ -45,7 +45,7 @@ private:
 	CharPosition fruit; // need to clarify this combination
 	CharPosition poison;
 	std::vector<CharPosition> snake; // represent the snake's body
-	std::vector<Stage> stages;
+	
 	std::deque<Item> items; // Keeping track of 3 items
 	
 
@@ -63,6 +63,7 @@ private:
 	void createItems();
 
 	// Variables, Methods for stages
+	std::vector<Stage> stages;
 	int stage;
 	int initSnakeSize;
 	int cntFruit, cntPoison, cntGate;

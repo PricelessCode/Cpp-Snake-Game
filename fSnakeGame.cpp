@@ -51,8 +51,9 @@ fSnakeGame::fSnakeGame() {
 
 	srand(time(NULL));
 	
-	InitGameWindow();
+
 	createStages();
+	InitGameWindow();
 
 	// Init 3 items on the screen
 	for (int i = 0; i < 3; i++) {
@@ -93,20 +94,41 @@ void fSnakeGame::InitGameWindow() {
 	keypad(stdscr, true); // initialise the keyboard: we can use arrows for directions
 	noecho(); // user input is not displayed on the screen
 	curs_set(0); // cursor symbol is not not displayed on the screen (Linux)
-	getmaxyx(stdscr, maxheight, maxwidth); // define dimensions of game window
-	gameScreenWidth = maxwidth - 30;
-	gameScreenHeight = maxheight;
+	// getmaxyx(stdscr, maxheight, maxwidth); // define dimensions of game window
+	// maxheight = 200;
+	// maxwidth = 200;
+	gameScreenWidth = stages[stage].walls[0].size();
+	gameScreenHeight = stages[stage].walls.size();
 	return; 
 }
 
 void fSnakeGame::createStages() {
 	Stage stage1;
-	stage1.barriers = {
-		CharPosition(4,5),
-		CharPosition(5,6),
-		CharPosition(5,7),
-		CharPosition(5,8),
-		CharPosition(5,9),
+	stage1.walls = {
+		{2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2},
+		
+		
 	};
 	stage1.length = 6;
 	stage1.nFruit = 1;
@@ -166,42 +188,49 @@ bool fSnakeGame::checkCompleted() {
 
 // draw the game window
 void fSnakeGame::DrawWindow() {
-	for (int i = 0; i < gameScreenWidth; i++) // draws top
-	{
-		move(0, i);
-		addch(edgechar);
-	}
+	// for (int i = 0; i < gameScreenWidth; i++) // draws top
+	// {
+	// 	move(0, i);
+	// 	addch(edgechar);
+	// }
 
-	for (int i = 0; i < gameScreenWidth; i++) // draws bottom
-	{
-		move(maxheight - 2, i);
-		addch(edgechar);
-	}
+	// for (int i = 0; i < gameScreenWidth; i++) // draws bottom
+	// {
+	// 	move(maxheight - 2, i);
+	// 	addch(edgechar);
+	// }
 
-	for (int i = 0; i < maxheight-1; i++) // draws left side
-	{
-		move(i, 0);
-		if (i == 0 || i == maxheight - 2) {
-			addch(imChar);
-		} else {
-			addch(edgechar);	
+	// for (int i = 0; i < maxheight-1; i++) // draws left side
+	// {
+	// 	move(i, 0);
+	// 	if (i == 0 || i == maxheight - 2) {
+	// 		addch(imChar);
+	// 	} else {
+	// 		addch(edgechar);	
+	// 	}
+	// }
+
+	// for (int i = 0; i < maxheight-1; i++) // draws right side
+	// {
+	// 	move(i, gameScreenWidth - 1);
+	// 	if (i == 0 || i == maxheight - 2) {
+	// 		addch(imChar);
+	// 	} else {
+	// 		addch(edgechar);	
+	// 	}
+	// }
+
+	// Draw Walls
+	for (int i = 0; i < stages[stage].walls.size(); i++) { // v
+		for (int j = 0; j < stages[stage].walls[0].size(); j++) { // >
+			move(i, j);
+			if (stages[stage].walls[i][j] == 1) {
+				addch(edgechar);
+			} else if (stages[stage].walls[i][j] == 2) {
+				addch(imChar);
+			}
+			
 		}
-	}
-
-	for (int i = 0; i < maxheight-1; i++) // draws right side
-	{
-		move(i, gameScreenWidth - 1);
-		if (i == 0 || i == maxheight - 2) {
-			addch(imChar);
-		} else {
-			addch(edgechar);	
-		}
-	}
-
-	// Draw Barriers
-	for (int i = 0; i < stages[stage].barriers.size(); i++) {
-		move(stages[stage].barriers[i].y, stages[stage].barriers[i].x);
-		addch(edgechar);
 	}
 
 
@@ -284,7 +313,7 @@ void fSnakeGame::DrawWindow() {
 // draw snake's body
 void fSnakeGame::DrawSnake() {
 	for (int i = 0; i < initSnakeSize; i++) {
-		snake.push_back(CharPosition(30 + i, 30));
+		snake.push_back(CharPosition(10 + i, 10));
 	}
 
 	for (int i = 0; i < snake.size(); i++) {
@@ -300,9 +329,9 @@ void fSnakeGame::DrawSnake() {
 
 // print score at bottom of window
 void fSnakeGame::PrintScore() {
-	move(maxheight-1, 0);
-	printw("Score: %d", score);
-	return;
+	// move(maxheight-1, 0);
+	// printw("Score: %d", score);
+	// return;
 }
 void fSnakeGame::drawItems() {
 
@@ -312,8 +341,8 @@ void fSnakeGame::drawItems() {
 void fSnakeGame::PositionFruit() {
 
 	while(1) {
-		int tmpx = rand() % gameScreenWidth + 1; // +1 to avoid the 0
-		int tmpy = rand() % maxheight + 1;
+		int tmpx = rand() % gameScreenWidth+ 1; // +1 to avoid the 0
+		int tmpy = rand() % gameScreenHeight + 1;
 
 		// check that the fruit is not positioned on the snake
 		for (int i = 0; i < snake.size(); i++) {
@@ -321,11 +350,18 @@ void fSnakeGame::PositionFruit() {
 				continue; // if true, ignore the following and go back to the beginning of function
 			}
 		}
-
+		
 		// check that the fruit is positioned within the game window
-		if (tmpx >= gameScreenWidth - 2 || tmpy >= maxheight - 3) {
+		if (tmpx >= gameScreenWidth - 4 || tmpy >= gameScreenHeight - 4) {
 			continue; // if true, ignore the following and go back to the beginning of function
 		}
+
+		// Check is not on the walls
+		if (stages[stage].walls[tmpy][tmpx] == 1) {
+			continue;
+		}
+
+		
 
 		// check with other items
 		for (int i = 0; i < 3; i++) {
@@ -359,7 +395,7 @@ void fSnakeGame::PositionFruit() {
 void fSnakeGame::PositionPoison() {
 	while(true) {
 		int tmpx = rand() % gameScreenWidth + 1; // +1 to avoid the 0
-		int tmpy = rand() % maxheight + 1;
+		int tmpy = rand() % gameScreenHeight + 1;
 
 		// check that the poison is not positioned on the snake
 		for (int i = 0; i < snake.size(); i++) {
@@ -375,12 +411,17 @@ void fSnakeGame::PositionPoison() {
 			}
 		}
 
+		
+
 		// check that the poison is positioned within the game window
-		if (tmpx >= gameScreenWidth - 2 || tmpy >= maxheight - 4) {
+		if (tmpx >= gameScreenWidth - 4 || tmpy >= maxheight - 4) {
 			continue; // if true, ignore the following and go back to the beginning of function
 		}
 
-
+		// Check is not on the walls
+		if (stages[stage].walls[tmpy][tmpx] == 1) {
+			continue;
+		}
 
 		// if the coordinates are valid, add fruit in the window
 		poison.x = tmpx;
@@ -411,17 +452,14 @@ bool fSnakeGame::FatalCollision() {
 	}
 
 	// if the snake hits the level walls
-	for (int i = 0; i < stages[stage].barriers.size(); i++) {
-		if (snake[0].x == stages[stage].barriers[i].x && snake[0].y == stages[stage].barriers[i].y) {
-			return true;
-		}
+	if (stages[stage].walls[snake[0].y][snake[0].x] == 1) {
+		return true;
 	}
+	
 
 	// if the snake collides into himself
-	for (int i = 2; i < snake.size(); i++)
-	{
-		if (snake[0].x == snake[i].x && snake[0].y == snake[i].y)
-		{
+	for (int i = 2; i < snake.size(); i++) {
+		if (snake[0].x == snake[i].x && snake[0].y == snake[i].y) {
 			return true;
 		}
 	}
