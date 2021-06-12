@@ -9,6 +9,7 @@ The game is a very simple version of the classic snake game.
 #include <ncurses.h>
 #include <cstdlib>
 #include <ctime>
+#include <map>
 #include <thread>
 #ifndef FSNAKEGAME_H
 #define FSNAKEGAME_H
@@ -17,6 +18,11 @@ struct CharPosition {
 	int x, y;
 	CharPosition(int col, int row);
 	CharPosition();
+};
+
+struct Stage {
+	std::vector<CharPosition> barriers;
+	int length, nFruit, nPoison, nGate;	
 };
 
 struct Item {
@@ -39,10 +45,12 @@ private:
 	CharPosition fruit; // need to clarify this combination
 	CharPosition poison;
 	std::vector<CharPosition> snake; // represent the snake's body
+	std::vector<Stage> stages;
 	std::deque<Item> items; // Keeping track of 3 items
+	
+
 
 	void InitGameWindow();
-	void DrawWindow();
 	void DrawSnake();
 	void drawItems();
 	void PrintScore();
@@ -53,6 +61,18 @@ private:
 	bool GetsFruit();
 	bool GetsPoison();
 	void createItems();
+
+	// Variables, Methods for stages
+	int stage;
+	int initSnakeSize;
+	int cntFruit, cntPoison, cntGate;
+	bool bLength, bFruit, bPoison, bGate;
+
+	CharPosition scoreScreen;
+	CharPosition missionScreen;
+	void createStages();
+	void DrawWindow();
+	bool checkCompleted();
 	void updateBoard();
 
 public:
