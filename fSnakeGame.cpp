@@ -136,6 +136,7 @@ void fSnakeGame::createStages() {
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2},
 		
 		
@@ -168,9 +169,8 @@ void fSnakeGame::createStages() {
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2},
-		
-		
 	};
 	stage2.length = 6;
 	stage2.nFruit = 2;
@@ -231,7 +231,6 @@ void fSnakeGame::DrawWindow() {
 			} else if (stages[stage].walls[i][j] == 2) {
 				addch(imChar);
 			}
-			
 		}
 	}
 
@@ -248,25 +247,25 @@ void fSnakeGame::DrawWindow() {
 	// Top
 	for (int i = 0; i < XSCREENSIZE; i++) {
 		move(screenStartY, screenStartX + i);
-		addch('^');
+		addch(edgechar);
 	}
 
 	// Bottom
 	for (int i = 0; i < XSCREENSIZE; i++) {
 		move(screenStartY + YSCREENSIZE, screenStartX + i);
-		addch('^');
+		addch(edgechar);
 	}
 
 	// Left
 	for (int i = 0; i < YSCREENSIZE; i++) {
 		move(screenStartY + i, screenStartX);
-		addch('^');
+		addch(edgechar);
 	}
 
 	// Right
 	for (int i = 0; i < YSCREENSIZE; i++) {
 		move(screenStartY + i, screenStartX + XSCREENSIZE - 1);
-		addch('^');
+		addch(edgechar);
 	}
 	
 	move(screenStartY + 1, screenStartX + 1);
@@ -276,32 +275,32 @@ void fSnakeGame::DrawWindow() {
 
 	// Draw Misison Board
 	offSetX = 5;
-	offSetY = 18;
+	offSetY = 12;
 	screenStartX = gameScreenWidth + offSetX;
 	screenStartY = 0 + offSetY;
 
 	// Top
 	for (int i = 0; i < XSCREENSIZE; i++) {
 		move(screenStartY, screenStartX + i);
-		addch('^');
+		addch(edgechar);
 	}
 
 	// Bottom
 	for (int i = 0; i < XSCREENSIZE; i++) {
 		move(screenStartY + YSCREENSIZE, screenStartX + i);
-		addch('^');
+		addch(edgechar);
 	}
 
 	// Left
 	for (int i = 0; i < YSCREENSIZE; i++) {
 		move(screenStartY + i, screenStartX);
-		addch('^');
+		addch(edgechar);
 	}
 
 	// Right
 	for (int i = 0; i < YSCREENSIZE; i++) {
 		move(screenStartY + i, screenStartX + XSCREENSIZE - 1);
-		addch('^');
+		addch(edgechar);
 	}
 
 	move(screenStartY + 1, screenStartX + 1);
@@ -679,7 +678,8 @@ void fSnakeGame::createItems() {
 		}
 	}
 	
-	usleep(1000000000000000000);
+	usleep(1000000);
+	this_thread::sleep_for(milliseconds(300000000000));
 }
 
 void fSnakeGame::PlayGame() {
