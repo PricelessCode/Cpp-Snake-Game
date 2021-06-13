@@ -8,24 +8,24 @@ This is handling all user interaction. For game logic, please see fSnakeGame.h.
 int maxheight, maxwidth;
 void PlayGame();
 int IsUserReady();
-int AskUserToPlayAgain();
+int AskUserToPlayAgain(int);
 void ClearCentre();
 int UserInput();
 
 
-int main () {	
+int main () {
 	int stage = 0;
 	if (IsUserReady() == 'y') { // wait for confirmation of the user
 		while(true) {
 			fSnakeGame NewSnake(stage);
 			NewSnake.PlayGame();
-			if (NewSnake.checkCompleted()) {
-				clear();
-				nodelay(stdscr, false);
-				AskUserToPlayAgain();
-			} else {
-				break;
-			} 
+			
+			++stage;
+			clear();
+			nodelay(stdscr, false);
+			AskUserToPlayAgain(stage + 1);
+			nodelay(stdscr, true);
+			
 		}
 	}
 }
@@ -59,10 +59,10 @@ int IsUserReady() {
 }
 
 // print end of the game menu and ask user to play again
-int AskUserToPlayAgain()
+int AskUserToPlayAgain(int stage)
 {
 	ClearCentre(2.5, 2.5);
-	// nodelay(stdscr, false);
-	printw("Ready for the next round? (y/n)");
+	
+	printw("Congrats!!! Next Round: %d (press Any key to start)", stage);
 	return UserInput();
 }

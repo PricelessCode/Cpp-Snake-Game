@@ -45,6 +45,7 @@ private:
 	// del stands for delay
 	bool bEatsFruit;
 	bool bEatsPoison;
+	bool bIsEnded;
 	CharPosition fruit; // need to clarify this combination
 	CharPosition poison;
 	CharPosition entGate;
