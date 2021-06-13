@@ -27,10 +27,16 @@ fSnakeGame::fSnakeGame(int s) {
 	partchar = '@'; // character to represent the snake
 	edgechar = (char)219; // full rectangle on the key table
 	gateChar = '#';
+	gateEntChar = 'E';
+	gateDestChar = 'D';
 	imChar = (char)43;
 	initSnakeSize = 5;
 	fruitchar = '*'; 
 	poisonChar = 'X';
+	entGate.x = 0;
+	entGate.y = 0;
+	destGate.x = 0;
+	destGate.y = 0;
 	fruit.x = 0;
 	fruit.y = 0;
 	poison.x = 0;
@@ -39,6 +45,7 @@ fSnakeGame::fSnakeGame(int s) {
 	del = 110000;
 	bEatsFruit = false;
 	bEatsPoison = false;
+	bPassedGates = false;
 	direction = 'l';
 	stage = s;
 	cntFruit = 0;
@@ -54,6 +61,7 @@ fSnakeGame::fSnakeGame(int s) {
 
 	createStages();
 	InitGameWindow();
+	
 
 	// Init 3 items on the screen
 	for (int i = 0; i < 3; i++) {
@@ -75,6 +83,7 @@ fSnakeGame::fSnakeGame(int s) {
 	}
 
 	DrawWindow();
+	PositionGate();
 	DrawSnake();
 	PrintScore();
 
@@ -330,8 +339,6 @@ void fSnakeGame::PositionFruit() {
 			continue;
 		}
 
-		
-
 		// check with other items
 		for (int i = 0; i < 3; i++) {
 			if (items[i].pos.x == tmpx && items[i].pos.y == tmpy) {
@@ -412,8 +419,55 @@ void fSnakeGame::PositionPoison() {
 	refresh();
 }
 
+void fSnakeGame::PositionGate() {
+	// Ent Gate
+	DrawWindow();
+	while (true) {
+		int tmpX = rand() % gameScreenWidth;
+		int tmpY = rand() % gameScreenHeight;
+
+		if (stages[stage].walls[tmpY][tmpX] != 1) {
+			continue;
+		}
+		move(entGate.y, entGate.x);
+		addch(edgechar);
+		refresh();
+
+		entGate.x = tmpX;
+		entGate.y = tmpY;
+		move(entGate.y, entGate.x);
+		addch(gateEntChar);
+		refresh();
+		break;
+	}
+	// Dest Gate
+	while (true) {
+		int tmpX = rand() % gameScreenWidth;
+		int tmpY = rand() % gameScreenHeight;
+
+		if (stages[stage].walls[tmpY][tmpX] != 1) {
+			continue;
+		}
+
+		move(destGate.y, destGate.x);
+		addch(edgechar);
+		refresh();
+
+		destGate.x = tmpX;
+		destGate.y = tmpY;
+		move(destGate.y, destGate.x);
+		addch(gateDestChar);
+		refresh();
+		break;
+	}
+}
+
 // set game over situations
 bool fSnakeGame::FatalCollision() {
+	if ((snake[0].x == entGate.x && snake[0].y == entGate.y) || (snake[0].x == destGate.x) && (snake[0].y == destGate.y)) {
+		return false;
+	}
+
 	// if the snake hits the edge of the window
 	if (snake[0].x == 0 || snake[0].x == gameScreenWidth-1 || snake[0].y == 0 || snake[0].y == maxheight-2)
 	{
@@ -499,7 +553,10 @@ void fSnakeGame::MoveSnake() {
 	if (!bEatsFruit) {
 		// if fruit was not eaten remove the tail
 		move(snake[snake.size()-1].y, snake[snake.size()-1].x); // moves at the end of the tail
-		addch(' '); // add empty ch to remove last character
+		// if (snake[snake.size() - 1].y != destGate.y && snake[snake.size() - 1].y != destGate.x)
+			addch(' '); // add empty ch to remove last character
+		move(destGate.y, destGate.x);
+		addch(gateDestChar);
 		refresh();
 		snake.pop_back(); // removes the last element in the vector, reducing the container size by one
 	}
@@ -507,7 +564,9 @@ void fSnakeGame::MoveSnake() {
 	
 	if (bEatsPoison) {
 		move(snake[snake.size()-1].y, snake[snake.size()-1].x); // moves at the end of the tail
-		addch(' '); // add empty ch to remove last character
+		// if (snake[snake.size() - 1].y != destGate.y && snake[snake.size() - 1].y != destGate.x)
+			addch(' '); // add empty ch to remove last character
+		
 		refresh();
 		snake.pop_back(); // removes the last element in the vector, reducing the container size by one
 	}
@@ -524,6 +583,33 @@ void fSnakeGame::MoveSnake() {
 		snake.insert(snake.begin(), CharPosition(snake[0].x, snake[0].y+1)); 
 	}
 
+	for (int i = 0; i < snake.size(); i++) {
+		if (snake[i].x == entGate.x && snake[i].y == entGate.y) {
+			// Change direction for head
+			if (i == 0) {
+				// Dest at the Bottom
+				if (destGate.y == gameScreenHeight - 1) {
+					direction = 'u';
+				// Dest at the Top
+				} else if (destGate.y == 0) {
+					direction = 'd';
+				// Dest at the left
+				} else if (destGate.x == 0) {
+					direction = 'r';
+				// Dest at the right
+				} else if (destGate.x == gameScreenWidth - 1) {
+					direction = 'l';
+				} else {
+
+				}
+			}
+			snake[i].x = destGate.x;
+			snake[i].y = destGate.y;
+		}
+	}
+
+	
+
 	// Move to the new CharPosition coordinates
 	move(snake[0].y, snake[0].x);
 	addch(headChar); // add a new head
@@ -531,16 +617,24 @@ void fSnakeGame::MoveSnake() {
 	// Change previous head to body char
 	move(snake[1].y, snake[1].x);
 	addch(partchar);
+
+	move(destGate.y, destGate.x);
+	addch(gateDestChar);
+
+	// If the snake has passed the Destination gate, Create another one
+	if (snake[snake.size() - 1].x == destGate.x && snake[snake.size() - 1].y == destGate.y) {
+		PositionGate();
+	}
+
 	refresh();
 	return;
 }
 
 // Add items every 3 seconds
 void fSnakeGame::createItems() {
-	while(1) {
+	while (1) {
 		this_thread::sleep_for(milliseconds(3000));
 		rand() % 10 > 4 ? PositionFruit() : PositionPoison();
-		// break;
 	}
 }
 
@@ -555,7 +649,7 @@ void fSnakeGame::PlayGame() {
 			
             break;
         }
-
+		
         GetsFruit();
 		GetsPoison();
         MoveSnake();
@@ -563,8 +657,8 @@ void fSnakeGame::PlayGame() {
 
 		//Check - If the user has completed the level
 		if (cntFruit == 1) {
-			// t.join();
-			break;
+			
+			// break;
 		}
 
         usleep(del); // delay

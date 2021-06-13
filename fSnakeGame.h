@@ -36,6 +36,9 @@ private:
 	int score, del, gameScreenWidth, gameScreenHeight, maxwidth, maxheight, itemIndex;
 	char direction, headChar, partchar, edgechar, imChar, fruitchar, poisonChar;
 	char gateChar;
+	char gateEntChar;
+	char gateDestChar;
+	bool bPassedGates;
 	// partchar is the character representing the snake's body
 	// edgechar is the character representing the edge of the game window
 	// fruitchar is the character representing the fruit
@@ -44,6 +47,8 @@ private:
 	bool bEatsPoison;
 	CharPosition fruit; // need to clarify this combination
 	CharPosition poison;
+	CharPosition entGate;
+	CharPosition destGate;
 	std::vector<CharPosition> snake; // represent the snake's body
 	
 	std::deque<Item> items; // Keeping track of 3 items
@@ -56,6 +61,7 @@ private:
 	void PrintScore();
 	void PositionFruit();
 	void PositionPoison();
+	void PositionGate();
 	bool FatalCollision();
 	void MoveSnake();
 	bool GetsFruit();
